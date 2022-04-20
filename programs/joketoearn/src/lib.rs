@@ -12,6 +12,7 @@ pub mod joketoearn {
     ) -> Result<()> {
         
         let joke: &mut Account<Joke> = &mut ctx.accounts.joke_account;
+        !msg("hello joke");
         joke.author = *ctx.accounts.authority.key;
         joke.content = joke_content;
         Ok(())
