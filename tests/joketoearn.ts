@@ -9,9 +9,23 @@ describe("joketoearn", () => {
 
   const program = anchor.workspace.Joketoearn as Program<Joketoearn>;
 
-  it("Is initialized!", async () => {
+  it("It Create a Joke!", async () => {
     // Add your test here.
-    const tx = await program.methods.initialize().rpc();
+
+    const jokeAccountKeypair = anchor.web3.Keypair.generate();
+
+    const tx = await program.rpc.createJoke("Not funny ...",{
+      accounts: {
+        jokeAccount: jokeAccountKeypair.publicKey,
+        authority: program.provider.wallet.publicKey,
+        systemProgram: anchor.web3.SystemProgram.programId,
+      },
+      signers: [jokeAccountKeypair],
+    });
+
     console.log("Your transaction signature", tx);
+
+    const jokes = await program.account.joke.all();
+    console.log(jokes);
   });
 });
